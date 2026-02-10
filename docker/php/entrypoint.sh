@@ -4,8 +4,15 @@ set -euo pipefail
 cd /var/www/html
 
 # Ensure writable dirs for Laravel (dev-friendly)
-mkdir -p storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache || true
+mkdir -p \
+  storage \
+  storage/framework/cache \
+  storage/framework/sessions \
+  storage/framework/views \
+  storage/logs \
+  bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+chmod -R 775 storage bootstrap/cache 2>/dev/null || true
 
 # Install PHP deps if needed (when using bind mounts)
 if [ ! -f vendor/autoload.php ]; then

@@ -7,10 +7,13 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
+      # Use named volumes for writable Laravel directories to avoid Windows bind-mount permission issues
+      - crm_storage:/var/www/html/storage
+      - crm_cache:/var/www/html/bootstrap/cache
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
-      APP_URL: http://crm.localhost:8080
+      APP_URL: http://crm.localhost:8888
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
@@ -18,7 +21,7 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: my-secret-pw
       SESSION_DRIVER: database
-      SESSION_DOMAIN: .localhost
+      SESSION_DOMAIN: .crm.localhost
       CACHE_STORE: database
       QUEUE_CONNECTION: database
     depends_on:
@@ -28,7 +31,7 @@ services:
     image: nginx:1.27-alpine
     container_name: crm_web
     ports:
-      - "8080:80"
+      - "8888:80"
     volumes:
       - ./:/var/www/html
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
@@ -48,3 +51,5 @@ services:
 
 volumes:
   crm_db:
+  crm_storage:
+  crm_cache:
