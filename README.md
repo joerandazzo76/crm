@@ -62,7 +62,7 @@ A full-featured, multi-tenant CRM (Customer Relationship Management) application
 
 1. **Clone the repository:**
    ```bash
-   git clone <repo-url> crm
+   git clone https://github.com/joerandazzo76/crm.git crm
    cd crm
    ```
 
