@@ -1,0 +1,91 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+early_access: false
+
+reviews:
+  profile: chill
+  request_changes_workflow: true
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  review_status: true
+  collapse_walkthrough: false
+  changed_files_summary: true
+  sequence_diagrams: true
+  poem: false
+
+  path_filters:
+    - "!vendor/**"
+    - "!node_modules/**"
+    - "!public/build/**"
+    - "!package-lock.json"
+    - "!composer.lock"
+    - "!storage/**"
+    - "!bootstrap/cache/**"
+
+  path_instructions:
+    - path: "app/Livewire/**/*.php"
+      instructions: |
+        This is a Livewire 4 component. Ensure properties use proper
+        Livewire lifecycle hooks, validate user input, and avoid N+1
+        queries in render methods. Check that any database writes go
+        through the tenant-scoped connection.
+    - path: "app/Models/**/*.php"
+      instructions: |
+        Eloquent models for a multi-tenant CRM (stancl/tenancy v3).
+        Tenant models use the tenant DB connection automatically.
+        Verify $fillable, $casts, and relationships are correct.
+        The User model has a 'hashed' cast on password — never use
+        Hash::make() when creating users via Eloquent.
+    - path: "database/migrations/tenant/**"
+      instructions: |
+        These are tenant-scoped migrations that run per-tenant database.
+        They must NOT reference the central database tables.
+    - path: "routes/tenant.php"
+      instructions: |
+        Tenant routes use InitializeTenancyBySubdomain and
+        PreventAccessFromCentralDomains middleware. Ensure new
+        routes are placed inside the correct middleware group.
+    - path: "routes/web.php"
+      instructions: |
+        Central routes must be wrapped in a Route::domain() loop
+        over config('tenancy.central_domains') to prevent tenant
+        routes from overriding them.
+    - path: "resources/views/**/*.blade.php"
+      instructions: |
+        Blade templates using Tailwind CSS v4 and Livewire 4 directives.
+        Check for proper escaping of user data and correct wire: syntax.
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    ignore_title_keywords:
+      - WIP
+      - DO NOT MERGE
+
+  finishing_touches:
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: true
+
+  tools:
+    phpstan:
+      enabled: true
+      level: "5"
+    github-checks:
+      enabled: true
+      timeout_ms: 120000
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    scope: local
+  issues:
+    scope: local
+  pull_requests:
+    scope: local
