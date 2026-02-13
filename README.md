@@ -11,6 +11,7 @@ A full-featured, multi-tenant CRM (Customer Relationship Management) application
 - **Import/Export:** maatwebsite/excel
 - **Billing (optional):** Laravel Cashier (Stripe)
 - **Permissions:** Role-based (admin, manager, member)
+- **coderabbit**
 
 ## Features
 
