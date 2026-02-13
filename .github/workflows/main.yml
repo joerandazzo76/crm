@@ -1,12 +1,34 @@
-            - name: Drupal Composer updates
-  # You may pin to the exact commit or the version.
-  # uses: valicm/drupal-update@00c385b6cc59bf4a367eab5a4960179cb62b089a
-  uses: valicm/drupal-update@v4
-  with:
-    # Are we doing minor or major updates. Allowed values are semver-safe-update or all
-    update_type: # optional, default is semver-safe-update
-    # Skip checking for Drupal core updates. Default true
-    update_core: # optional, default is true
-    # Modules excluded from checks. Use comma separated list: token,redirect,pathauto
-    update_exclude: # optional
-          
+name: Composer Update
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Run weekly on Sundays at midnight
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  composer-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Update Composer dependencies
+        run: composer update --no-interaction --prefer-dist
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update composer dependencies'
+          title: 'Update Composer Dependencies'
+          body: 'Automated update of Composer dependencies'
+          branch: composer-updates
+          delete-branch: true
