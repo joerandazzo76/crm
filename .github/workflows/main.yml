@@ -1,0 +1,12 @@
+            - name: Drupal Composer updates
+  # You may pin to the exact commit or the version.
+  # uses: valicm/drupal-update@00c385b6cc59bf4a367eab5a4960179cb62b089a
+  uses: valicm/drupal-update@v4
+  with:
+    # Are we doing minor or major updates. Allowed values are semver-safe-update or all
+    update_type: # optional, default is semver-safe-update
+    # Skip checking for Drupal core updates. Default true
+    update_core: # optional, default is true
+    # Modules excluded from checks. Use comma separated list: token,redirect,pathauto
+    update_exclude: # optional
+          
