@@ -39,6 +39,9 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
+      - name: composer update
+        run: composer update
+
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
